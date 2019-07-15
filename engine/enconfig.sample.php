@@ -4,17 +4,17 @@
 
 // LEDs pinout (RPi's GPIO IDs are used)
 $roomsLedConfig = Array(
-	"jonas" => Array(
-		"led_r" => 17,
-		"led_g" => 22,
-		"led_b" => 24
-	),
+    "jonas" => Array(
+        "led_r" => 17,
+        "led_g" => 22,
+        "led_b" => 24
+    ),
 
-	"alex" => Array(
-		"led_r" => 4,
-		"led_g" => 18,
-		"led_b" => 27
-	)
+    "alex" => Array(
+        "led_r" => 4,
+        "led_g" => 18,
+        "led_b" => 27
+    )
 );
 
 // System

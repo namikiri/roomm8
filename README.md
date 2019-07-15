@@ -7,4 +7,4 @@ Dudes & ma'ladies, this so called "project" is made for fun and for the flat whe
 ## Resources
 This thing couldn't be made withous these awesome resources:
 * [PIGPIO](http://abyz.me.uk/rpi/pigpio/)
-* [Connecting LED stripes to RPi](https://dordnung.de/raspberrypi-ledstrip/)
+* [Connecting LED strips to RPi](https://dordnung.de/raspberrypi-ledstrip/)
