@@ -6,14 +6,15 @@ function leds_write($room, $r, $g, $b) {
     $fd = fopen(PIGPIO_DEVICE, 'w');
 
     if ($fd) {
-        if (empty($roomsLedConfig[$room])) {
+
+        $roomConfig = getRoomConfig($room);
+
+        if (empty($roomConfig)) {
             error_log('Room ID ' . $room . ' is not configured');
             fclose($fd);
 
             return false;
         } else {
-            $roomConfig = $roomsLedConfig[$room];
-
             $result = (fwrite($fd, "p {$roomConfig['led_r']} $r\n") &&
                        fwrite($fd, "p {$roomConfig['led_g']} $g\n") &&
                        fwrite($fd, "p {$roomConfig['led_b']} $b\n"));
@@ -32,7 +33,7 @@ function leds_writeHex($room, $color) {
 
     $color = strtolower($color);
 
-    if (preg_match('/^[0-9a-f]{6}$/', $color) == 1) {
+    if (isCorrectColor($color)) {
         $colorInt = hexdec($color);
 
         $r = ($colorInt >> 16) & 0xFF;

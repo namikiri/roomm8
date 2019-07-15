@@ -29,4 +29,5 @@ define ('TELEGRAM_BOT_TOKEN', ''); // Obtain in from @BotFather
 define ('TELEGRAM_CALLBACK_KEY', ''); // This will be used in your webhook
 define ('TELEGRAM_USE_DIRECT_RESPONSE', true); // respond directly or use HTTP API
 
-$telegram_allowedIds = [];
+// Add your Telegram account IDs here to allow these people to change LEDs state
+$telegram_allowedIds = [31337, 228420];

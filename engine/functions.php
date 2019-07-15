@@ -23,3 +23,36 @@ function json_respond ($status, $payload = Array()) {
     header('Content-Type: application/json');
     die(json_encode(Array('status' => (int)$status, 'payload' => $payload)));
 }
+
+function isCorrectColor($color) {
+    return preg_match('/^[0-9a-f]{6}$/', $color) == 1;
+}
+
+function statusText2Color($statusText) {
+    switch (strtolower($statusText)) {
+        case 'welcome':
+            return WELCOME_COLOR;
+            break;
+
+        case 'busy': 
+            return BUSY_COLOR;
+            break;
+
+        case 'gtfo':
+            return GTFO_COLOR;
+            break;
+
+        default:
+            return false;
+    }
+}
+
+function getRoomConfig($room) {
+    global $roomsLedConfig;
+
+    if (empty($roomsLedConfig[$room])) {
+        return false;
+    } else {
+        return $roomsLedConfig[$room];
+    }
+}

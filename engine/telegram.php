@@ -74,12 +74,26 @@ function telegram_processCommand($commandline, $chat, $user, $messageId)
         return;
     }
 
+    global $telegram_allowedIds;
+
+    if (!in_array($user, $telegram_allowedIds)) {
+        telegram_sendMessage('Not authorized', $chat);
+        return;
+    }
+
     switch ($commands[0]) {
 
         case 'start':
             $startMessage = <<<ROOMM8
-Hi! This is Roomm8 bot. If you are authorized
-to use my commands just do it.
+Hi! This is Roomm8 bot.
+
+Use the following commands:
+
+/nightmode to set the LEDs to night light mode
+/shutdown to disable them entirely
+/status `<room> (welcome|busy|gtfo)` to set your room status 
+/color `<room> <color>` to set arbitrary color
+/start to show this help
 ROOMM8;
 
             telegram_sendMessage($startMessage, $chat);

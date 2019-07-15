@@ -8,27 +8,14 @@ function api_processStatus() {
     $room = strtolower($_GET['room']);
     $status = strtolower($_GET['status']);
 
-    if (empty($roomsLedConfig[$room])) {
+    if (empty(getRoomConfig($room))) {
         json_respond(1, 'Bad room');
     }
 
-    $statusColor = '';
+    $statusColor = statusText2Color($status);
 
-    switch ($status) {
-        case 'welcome':
-            $statusColor = WELCOME_COLOR;
-            break;
-
-        case 'busy': 
-            $statusColor = BUSY_COLOR;
-            break;
-
-        case 'gtfo':
-            $statusColor = GTFO_COLOR;
-            break;
-
-        default:
-            json_respond(2, 'Bad status');
+    if (!$statusColor) {
+        json_respond(2 , 'Bad color');
     }
 
     if (leds_writeHex($room, $statusColor)) {
@@ -39,16 +26,16 @@ function api_processStatus() {
 }
 
 function api_processColor() {
-    global $roomsLedConfig;
+    
 
     $room = strtolower($_GET['room']);
     $color = strtolower($_GET['color']);
 
-    if (empty($roomsLedConfig[$room])) {
+    if (empty(getRoomConfig($room))) {
         json_respond(1, 'Bad room');
     }
 
-    if (preg_match('/^[0-9a-f]{6}$/', $color) == 1) {
+    if (isCorrectColor($color)) {
         if(leds_writeHex($room, $color)) {
             json_respond(0, 'OK');
         } else {
