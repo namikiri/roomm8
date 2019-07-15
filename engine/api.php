@@ -5,8 +5,8 @@ require_once 'engine/leds.php';
 function api_processStatus() {
     global $roomsLedConfig;
 
-    $room = $_GET['room'];
-    $status = $_GET['status'];
+    $room = strtolower($_GET['room']);
+    $status = strtolower($_GET['status']);
 
     if (empty($roomsLedConfig[$room])) {
         json_respond(1, 'Bad room');

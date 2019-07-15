@@ -51,7 +51,9 @@ function telegram_sendMessage ($text, $chat, $additionalParams = null, $dontExit
     }
 }
 
+function telegram_initiateStatusSet() {
 
+}
 
 function telegram_processCommand($commandline, $chat, $user, $messageId)
 {
@@ -67,7 +69,7 @@ function telegram_processCommand($commandline, $chat, $user, $messageId)
 
     $commands = explode(' ', $commandline);
 
-    if ($chat > 0 && $commands[0] == 'whoami') {
+    if ($commands[0] == 'whoami') {
         telegram_sendMessage(sprintf('Your id is `%d`.', $user), $chat);
         return;
     }
@@ -99,7 +101,7 @@ function telegram_processMessage($message) {
     $chat = (int)$message['chat']['id'];
     $post = (int)$message['message_id'];
 
-    $text = ($containsAttach ? $message['caption'] : $message['text']);
+    $text = $message['text'];
 
     if ($text[0] === '/') {
         telegram_processCommand($text, $chat, $user, $post);
@@ -120,16 +122,9 @@ function telegram_processInput() {
         die('Bad event data.');
 
     if (!empty($event['message'])) {
-        telegram_processMessage($event['message'], false, false);
-
-    } elseif (!empty($event['edited_message'])) {
-        telegram_processMessage($event['edited_message'], true, false);
-
-    } elseif (!empty($event['channel_post'])) {
-        telegram_processMessage($event['channel_post'], false, true);
-
-    } elseif (!empty($event['edited_channel_post'])) {
-        telegram_processMessage($event['edited_channel_post'], true, true);
+        telegram_processMessage($event['message']);
     }
 }
 
+
+telegram_processInput();

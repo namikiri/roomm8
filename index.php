@@ -12,6 +12,10 @@ switch ($route[0])
         require_once 'engine/api.php';
         break;
 
+    case 'telegram' :
+        require_once 'engine/telegram.php';
+        break;
+
     default :
         header('HTTP/1.1 302 Nothing To See Here');
         header('Location: https://github.com/namikiri/roomm8');
