@@ -1,5 +1,7 @@
 <?php
 
+require_once 'engine/leds.php';
+
 function curl_request ($method, $type, $data = Array()) {
     $curl = curl_init();
 
@@ -51,9 +53,15 @@ function telegram_sendMessage ($text, $chat, $additionalParams = null, $dontExit
     }
 }
 
-function telegram_initiateStatusSet() {
-
+function telegram_processStatusCommand($commandline, $chat, $user) {
+    telegram_sendMessage('Not implemented yet', $chat);
 }
+
+function telegram_processColorCommand($commandline, $chat, $user) {
+    telegram_sendMessage('Not implemented yet', $chat);
+}
+
+
 
 function telegram_processCommand($commandline, $chat, $user, $messageId)
 {
@@ -99,9 +107,28 @@ ROOMM8;
             telegram_sendMessage($startMessage, $chat);
             break;
 
+        case 'nightmode':
+            if(leds_setNightMode()) {
+                telegram_sendMessage('Successfully set night mode', $chat);
+            } else {
+                telegram_sendMessage('LED interaction failed, check `pigpiod`');
+            }
+            break;
+
+        case 'shutdown':
+            if(leds_shutdown('*')) {
+                telegram_sendMessage('Successfully disabled all the lights', $chat);
+            } else {
+                telegram_sendMessage('LED interaction failed, check `pigpiod`');
+            }
+            break;
 
         case 'status':
-            telegram_sendMessage('The command `/setchat` is deprecated. Please use `/addchat` instead.', $chat);
+            telegram_processStatusCommand($commandline, $chat, $user);
+            break;
+
+        case 'color':
+            telegram_processColorCommand($commandline, $chat, $user);
             break;
 
         default:
