@@ -53,12 +53,36 @@ function telegram_sendMessage ($text, $chat, $additionalParams = null, $dontExit
     }
 }
 
-function telegram_processStatusCommand($commandline, $chat, $user) {
-    telegram_sendMessage('Not implemented yet', $chat);
+function telegram_processStatusCommand($commands, $chat, $user) {
+    $room = getRoomConfig($commands[1]);
+
+    if ($room === false) {
+        telegram_sendMessage('Bad room ID', $chat);
+    }
+
+    $statusColor = statusText2Color($commands[2]);
+
+    if ($statusColor === false) {
+        telegram_sendMessage('Bad status, can be either `welcome`, `busy` or `gtfo`', $chat);
+    }
+
+    leds_writeHex($commands[1], $statusColor);
+    telegram_sendMessage('Status has been set', $chat);
 }
 
-function telegram_processColorCommand($commandline, $chat, $user) {
-    telegram_sendMessage('Not implemented yet', $chat);
+function telegram_processColorCommand($commands, $chat, $user) {
+    $room = getRoomConfig($commands[1]);
+
+    if ($room === false) {
+        telegram_sendMessage('Bad room ID', $chat);
+    }
+
+    if (isCorrectColor($commands[2])) {
+        leds_writeHex($commands[1], $commands[2]);
+        telegram_sendMessage('Color has been set', $chat);
+    } else {
+        telegram_sendMessage('Bad color, can be 6-symbol hex code, e.g. `FACE8D`', $chat);
+    }
 }
 
 
@@ -124,11 +148,11 @@ ROOMM8;
             break;
 
         case 'status':
-            telegram_processStatusCommand($commandline, $chat, $user);
+            telegram_processStatusCommand($commands, $chat, $user);
             break;
 
         case 'color':
-            telegram_processColorCommand($commandline, $chat, $user);
+            telegram_processColorCommand($commands, $chat, $user);
             break;
 
         default:
