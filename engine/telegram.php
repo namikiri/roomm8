@@ -154,10 +154,17 @@ ROOMM8;
             break;
 
         case 'shutdown':
-            if(leds_shutdown('*')) {
-                telegram_sendMessage('Successfully disabled all the lights', $chat);
+
+            $shutdownRoom = ($commands[1] === '*') ? '*' : config_getRoomPreference($user);
+
+            if ($shutdownRoom === null) {
+                telegram_sendMessage('No room preference set. Use `/setroom <room>` to set your room preference or `/shutdown *` to shut down all the lights.', $chat);
             } else {
-                telegram_sendMessage('LED interaction failed, check `pigpiod`', $chat);
+                if(leds_shutdown($shutdownRoom)) {
+                    telegram_sendMessage('Successfully performed shutdown operation', $chat);
+                } else {
+                    telegram_sendMessage('LED interaction failed, check `pigpiod`', $chat);
+                }
             }
             break;
 
