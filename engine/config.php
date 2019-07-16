@@ -35,7 +35,7 @@ function config_setVal($key, $value) {
 }
 
 function config_getRoomPreference($userId) {
-    $prefs = config_getVal('room_prefs', Array());
+    $prefs = config_getVal('room_prefs', null);
 
     return $prefs[$userId];
 }

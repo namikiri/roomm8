@@ -155,6 +155,41 @@ ROOMM8;
             telegram_processColorCommand($commands, $chat, $user);
             break;
 
+        case 'setroom':
+            if (getRoomConfig($commands[1]) !== false) {
+                config_setRoomPreference($user, strtolower($commands[1]));
+
+                $prefHint = <<<PREFHINT
+Successfully set the room preference!
+
+Now you can use these shorthand commands:
+/welcome to say that you're welcoming 
+/busy to indicate that you're busy right now but it's still OK to ask you
+/gtfo to tell your neighbours to fuck off
+PREFHINT;
+
+                telegram_sendMessage($prefHint, $chat);
+            } else {
+                telegram_sendMessage('Bad room ID', $chat);
+            }
+            break;
+
+        case 'welcome':
+        case 'busy':
+        case 'gtfo':
+            $roomPref = config_getRoomPreference($user);
+
+            if ($roomPref === null) {
+                telegram_sendMessage('No room preference set, use `/setroom <room_id>`', $chat);
+            } else {
+                $color = statusText2Color($commands[0]);
+
+                leds_writeHex($roomPref, $color);
+
+                telegram_sendMessage('Successfully set your room status', $chat);
+            }
+            break;
+
         default:
             telegram_sendMessage('Bad command.', $chat);
     }

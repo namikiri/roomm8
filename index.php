@@ -1,6 +1,7 @@
 <?php
 require_once 'engine/enconfig.php';
 require_once 'engine/functions.php';
+require_once 'engine/config.php';
 
 error_reporting(E_ALL ^ E_NOTICE);
 
