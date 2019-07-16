@@ -66,8 +66,11 @@ function telegram_processStatusCommand($commands, $chat, $user) {
         telegram_sendMessage('Bad status, can be either `welcome`, `busy` or `gtfo`', $chat);
     }
 
-    leds_writeHex($commands[1], $statusColor);
-    telegram_sendMessage('Status has been set', $chat);
+    if (leds_writeHex($commands[1], $statusColor)) {
+        telegram_sendMessage('Status has been set', $chat);
+    } else {
+        telegram_sendMessage('LED interaction failed, check `pigpiod`', $chat);
+    }
 }
 
 function telegram_processColorCommand($commands, $chat, $user) {
@@ -78,8 +81,12 @@ function telegram_processColorCommand($commands, $chat, $user) {
     }
 
     if (isCorrectColor($commands[2])) {
-        leds_writeHex($commands[1], $commands[2]);
-        telegram_sendMessage('Color has been set', $chat);
+        if (leds_writeHex($commands[1], $commands[2])) {
+            telegram_sendMessage('Color has been set', $chat);
+        } else {
+            telegram_sendMessage('LED interaction failed, check `pigpiod`', $chat);
+        }
+        
     } else {
         telegram_sendMessage('Bad color, can be 6-symbol hex code, e.g. `FACE8D`', $chat);
     }
@@ -142,7 +149,7 @@ ROOMM8;
             if(leds_setNightMode()) {
                 telegram_sendMessage('Successfully set night mode', $chat);
             } else {
-                telegram_sendMessage('LED interaction failed, check `pigpiod`');
+                telegram_sendMessage('LED interaction failed, check `pigpiod`', $chat);
             }
             break;
 
@@ -150,7 +157,7 @@ ROOMM8;
             if(leds_shutdown('*')) {
                 telegram_sendMessage('Successfully disabled all the lights', $chat);
             } else {
-                telegram_sendMessage('LED interaction failed, check `pigpiod`');
+                telegram_sendMessage('LED interaction failed, check `pigpiod`', $chat);
             }
             break;
 
@@ -191,9 +198,11 @@ PREFHINT;
             } else {
                 $color = statusText2Color($commands[0]);
 
-                leds_writeHex($roomPref, $color);
-
-                telegram_sendMessage('Successfully set your room status', $chat);
+                if(leds_writeHex($roomPref, $color)) {
+                    telegram_sendMessage('Successfully set your room status', $chat);
+                } else {
+                    telegram_sendMessage('LED interaction failed, check `pigpiod`', $chat);
+                }
             }
             break;
 
