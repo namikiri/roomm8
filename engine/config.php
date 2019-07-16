@@ -1,12 +1,5 @@
 <?php
 
-/*
-       Crawley the Telegram Beholder
-    by Asterleen ~ https://asterleen.com
-
-    https://github.com/asterleen/crawley
-*/
-
 $config = Array();
 
 function config_load() {
@@ -41,29 +34,23 @@ function config_setVal($key, $value) {
     config_save();
 }
 
-function config_getChats() {
-    return config_getVal('chats', Array());
+function config_getRoomPreference($userId) {
+    $prefs = config_getVal('room_prefs', Array());
+
+    return $prefs[$userId];
 }
 
-function config_saveChats($chats) {
-    config_setVal('chats', $chats);
+function config_setRoomPreference($userId, $roomPref) {
+    $prefs = config_getVal('room_prefs', null);
+
+    if ($prefs === null) {
+        $prefs = Array();
+    }
+
+    $prefs[$userId] = $roomPref;
+
+    config_setVal('room_prefs', $prefs);
 }
 
-function config_getChatById($chatId) {
-    $chats = config_getChats();
-    return $chats[$chatId];
-}
-
-function config_removeChatById($chatId) {
-    $chats = config_getChats();
-    unset ($chats[$chatId]);
-    config_saveChats($chats);
-}
-
-function config_addChat($chatId, $chat) {
-    $chats = config_getChats();
-    $chats[$chatId] = $chat;
-    config_saveChats($chats);
-}
 
 config_load();
