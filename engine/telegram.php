@@ -119,10 +119,17 @@ function telegram_processCommand($commandline, $chat, $user, $messageId)
             $startMessage = <<<ROOMM8
 Hi! This is Roomm8 bot.
 
-Use the following commands:
+Status shorthand commands:
+/welcome to say that you're welcoming 
+/busy to indicate that you're busy right now but it's still OK to ask you
+/gtfo to tell your neighbours to fuck off
 
+Common commands:
 /nightmode to set the LEDs to night light mode
 /shutdown to disable them entirely
+
+Configuration & less common commands:
+/setroom `<room>` to set your room
 /status `<room> (welcome|busy|gtfo)` to set your room status 
 /color `<room> <color>` to set arbitrary color
 /start to show this help
