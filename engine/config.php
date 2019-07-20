@@ -79,7 +79,7 @@ function config_getStatusColor($status) {
             return false;
     }
 
-    return (empty($statusColorConfig[$key]) ? $defaultColor : $statusColorConfig[$key]]);
+    return (empty($statusColorConfig[$key]) ? $defaultColor : $statusColorConfig[$key]);
 }
 
 function config_setStatusColor($status, $color) {
