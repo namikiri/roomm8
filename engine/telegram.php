@@ -112,6 +112,21 @@ function telegram_processConfigCommand($commands, $chat, $user) {
             }
             break;
 
+        case 'help':
+                    $helpMessage = <<<CONFIGHELP
+Roomm8 can be configured using a `/config` command. 
+Common syntax is: `/config <parameter> <arguments>`
+
+Available `parameter`s:
+---
+`statuscolor` - set status color. 
+Syntax: `/config statuscolor <room> <color>`
+---
+CONFIGHELP;
+
+                telegram_sendMessage($helpMessage, $chat);
+            break;
+
         default:
             telegram_sendMessage('Unknown configuration directive', $chat);
     }
