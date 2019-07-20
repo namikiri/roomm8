@@ -174,6 +174,7 @@ Common commands:
 /shutdown to disable them entirely
 
 Configuration & less common commands:
+/config to configure the system, see `/config help`
 /setroom `<room>` to set your room
 /status `<room> (welcome|busy|gtfo)` to set your room status 
 /color `<room> <color>` to set arbitrary color
