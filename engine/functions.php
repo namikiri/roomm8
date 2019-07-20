@@ -29,22 +29,7 @@ function isCorrectColor($color) {
 }
 
 function statusText2Color($statusText) {
-    switch (strtolower($statusText)) {
-        case 'welcome':
-            return WELCOME_COLOR;
-            break;
-
-        case 'busy': 
-            return BUSY_COLOR;
-            break;
-
-        case 'gtfo':
-            return GTFO_COLOR;
-            break;
-
-        default:
-            return false;
-    }
+    return config_getStatusColor(strtolower($statusText));
 }
 
 function getRoomConfig($room) {

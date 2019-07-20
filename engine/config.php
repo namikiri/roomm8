@@ -52,5 +52,59 @@ function config_setRoomPreference($userId, $roomPref) {
     config_setVal('room_prefs', $prefs);
 }
 
+function config_getStatusColor($status) {
+
+    $statusColorConfig = config_getVal('status_color_config', Array());
+    $key = "";
+    $defaultColor = "";
+
+    switch ($status) {
+        case 'welcome':
+            $key = 'welcome';
+            $defaultColor = WELCOME_COLOR;
+            break;
+
+        case 'busy':
+            $key = 'busy';
+            $defaultColor = BUSY_COLOR;
+            break;
+
+        case 'gtfo':
+            $key = 'gtfo';
+            $defaultColor = GTFO_COLOR;
+            break;
+        
+        default:
+            error_log('Bad status in config_getStatusColor()');
+            return false;
+    }
+
+    return (empty($statusColorConfig[$key]) ? $defaultColor : $statusColorConfig[$key]]);
+}
+
+function config_setStatusColor($status, $color) {
+    $statusColorConfig = config_getVal('status_color_config', Array());
+
+    switch ($status) {
+        case 'welcome':
+            $statusColorConfig['welcome'] = $color;
+            break;
+
+        case 'busy':
+            $statusColorConfig['busy'] = $color;
+            break;
+
+        case 'gtfo':
+            $statusColorConfig['gtfo'] = $color;
+            break;
+        
+        default:
+            error_log('Bad status in config_setStatusColor()');
+            return false;
+    }
+
+    config_setVal('status_color_config', $statusColorConfig);
+}
+
 
 config_load();

@@ -19,7 +19,9 @@ $roomsLedConfig = Array(
 
 // System
 define ('PIGPIO_DEVICE', '/dev/pigpio');
-define ('NIGHTMODE_COLOR', '1E1E1E')
+define ('NIGHTMODE_COLOR', '1E1E1E');
+
+// Default colors for statuses
 define ('WELCOME_COLOR', '00FF00');
 define ('BUSY_COLOR', 'FFFF00');
 define ('GTFO_COLOR', 'FF0000');
