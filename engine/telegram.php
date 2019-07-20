@@ -92,7 +92,30 @@ function telegram_processColorCommand($commands, $chat, $user) {
     }
 }
 
+function telegram_processConfigCommand($commands, $chat, $user) {
+    switch ($commands[1]) {
+        case 'statuscolor':
+            switch ($commands[2]) { // easy validation
+                case 'welcome':
+                case 'busy':
+                case 'gtfo':
+                    if (isCorrectColor($commands[3])) {
+                        config_setStatusColor($commands[2], $commands[3]);
+                        telegram_sendMessage('Successfully set new status color', $chat);
+                    } else {
+                        telegram_sendMessage('Bad color code, use 6-digit hexadecimal', $chat);
+                    }
+                    break;
 
+                default:
+                    telegram_sendMessage('Bad status code, can be either `welcome`, `busy` or `gtfo`', $chat);
+            }
+            break;
+
+        default:
+            telegram_sendMessage('Unknown configuration directive', $chat);
+    }
+}
 
 function telegram_processCommand($commandline, $chat, $user, $messageId)
 {
@@ -170,6 +193,10 @@ ROOMM8;
 
         case 'status':
             telegram_processStatusCommand($commands, $chat, $user);
+            break;
+
+        case 'config':
+            telegram_processConfigCommand($commands, $chat, $user);
             break;
 
         case 'color':
