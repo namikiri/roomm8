@@ -120,7 +120,7 @@ function config_getNMStartTime() {
     if (empty($nightmodeSettings['start_time'])) {
         return false;
     } else {
-        return (int)$nightmodeSettings['start_time']);
+        return (int)$nightmodeSettings['start_time'];
     }
 }
 
@@ -139,7 +139,7 @@ function config_getNMStopTime() {
     if (empty($nightmodeSettings['stop_time'])) {
         return false;
     } else {
-        return (int)$nightmodeSettings['stop_time']);
+        return (int)$nightmodeSettings['stop_time'];
     }
 }
 
@@ -170,7 +170,7 @@ function config_addNMScheduleItem($time, $color) {
         $schedule = Array();
     }
 
-    array_push($sch, Array(
+    array_push($schedule, Array(
             'time' => $time,
             'color' => $color
         ));
@@ -182,18 +182,20 @@ function config_removeNMScheduleItemByIndex($index) { // oh I'm so sorry for tha
     $schedule = config_getNightmodeSchedule();
 
     if (empty($schedule)) {
-        return; // okay...
+        return false; // okay...
     }
 
     $index = (int)$index;
 
     if ($index >= count($schedule)) {
-        return;
+        return false;
     }
 
     unset($schedule[$index]);
 
     config_setNightmodeSchedule($schedule);
+
+    return true;
 }
 
 config_load();

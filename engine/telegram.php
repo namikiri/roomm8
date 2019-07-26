@@ -92,6 +92,120 @@ function telegram_processColorCommand($commands, $chat, $user) {
     }
 }
 
+function telegram_processNightmodeConfigCommand($commands, $chat, $user) {
+    array_shift($commands); // remove 'config'
+    array_shift($commands); // remove 'nightmode'
+
+    switch ($commands[0]) {
+        case 'start':
+            $time = time2Minutes($commands[1]);
+
+            if ($time === false) {
+                telegram_sendMessage('Bad start time, use `hh:mm` format only', $chat);
+            } else {
+                if ($time >= 1440) {
+                    telegram_sendMessage('Bad start time, cannot be more than `24:00`', $chat);
+                } else {
+                    config_setNMStartTime($time);
+                    telegram_sendMessage('Successfully set start time', $chat);
+                }
+            }
+            break;
+
+        case 'end':
+            $time = time2Minutes($commands[1]);
+
+            if ($time === false) {
+                telegram_sendMessage('Bad end time, use `hh:mm` format only', $chat);
+            } else {
+                if ($time >= 1440) {
+                    telegram_sendMessage('Bad end time, cannot be more than `24:00`', $chat);
+                } else {
+                    config_setNMStopTime($time);
+                    telegram_sendMessage('Successfully set end time', $chat);
+                }
+            }
+            break;
+
+        case 'schedule':
+
+            $startTime = config_getNMStartTime();
+            $endTime = config_getNMStopTime();
+
+            if ($startTime === false || $endTime === false) {
+                telegram_sendMessage('Neither start or end time is configured, cannot set up schedule', $chat);
+            }
+
+            switch ($commands[1]) {
+                case 'add':
+                    $time = time2Minutes($commands[2]);
+
+                    if ($time === false) {
+                        telegram_sendMessage('Bad time, use `hh:mm` format only', $chat);
+                    } else {
+                        if ($time >= 1440) {
+                            telegram_sendMessage('Bad time, cannot be more than `24:00`', $chat);
+                        } else {
+                            if (isInRange($time, $startTime, $endTime)) {
+                                $color = strtolower($commands[3]);
+
+                                if (isCorrectColor($color)) {
+                                    config_addNMScheduleItem($time, $color);
+                                    telegram_sendMessage('Successfully added new item', $chat);
+                                } else {
+                                    telegram_sendMessage('Bad color, use 6-symbol hexadecimal format', $chat);
+                                }
+                            } else {
+                                telegram_sendMessage('Specified time is not in nightmode range (from ' .
+                                        minutes2Time($startTime) . ' to ' . minutes2Time($endTime) . ')', $chat);
+                            }
+                        }
+                    }
+                    break;
+
+                case 'remove': 
+                    $index = (int)$commands[2];
+
+                    if ($index < 0) {
+                        telegram_sendMessage('Index cannot be negative', $chat);
+                    } else {
+                        if (config_removeNMScheduleItemByIndex($index)) {
+                            telegram_sendMessage('Successfully removed the nightmode modifier at ' . $index, $chat);
+                        } else {
+                            telegram_sendMessage('Could not remove modifier specified index, check the bounds?', $chat);
+                        }
+                    }
+                    break;
+
+                case 'list':
+                    $items = config_getNightmodeSchedule();
+
+                    if (empty($items)) {
+                        telegram_sendMessage('No nightmode schedule set', $chat);
+                    } else {
+                        $response = "Night mode is configured as follows:\n\n```\n";
+
+                        for ($i = 0; $i < count($items); $i++) {
+                            $response .= $i . ' ' . minutes2Time($items[$i]['time']) . ' ' . ($items[$i]['color']) . "\n";
+                        }
+
+                        $response .= '```';
+
+                        telegram_sendMessage($response, $chat);
+                    }
+                    break;
+
+                default:
+                    telegram_sendMessage('No such schedule action, see `/config nightmode help`', $chat);
+            }
+            break;
+        
+        default:
+            telegram_sendMessage('Bad command, see `/config nightmode help`', $chat);
+            break;
+    }
+}
+
 function telegram_processConfigCommand($commands, $chat, $user) {
     switch ($commands[1]) {
         case 'statuscolor':
@@ -125,6 +239,11 @@ Syntax: `/config statuscolor <room> <color>`
 CONFIGHELP;
 
                 telegram_sendMessage($helpMessage, $chat);
+            break;
+
+
+        case 'nightmode':
+            telegram_processNightmodeConfigCommand($commands, $chat, $user);
             break;
 
         default:

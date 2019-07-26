@@ -67,6 +67,14 @@ function currentMinutes() {
     return time2Minutes(date('H:i'));
 }
 
+function isInRange($check, $start, $end) {
+    if ($start < $end) {
+        return ($check >= $start && $check < $end);
+    } else {
+        return ($check > $end && $check <= $start);
+    }
+}
+
 function array_sortby($array, $on, $order = SORT_ASC) {
     $new_array = array();
     $sortable_array = array();
@@ -100,3 +108,4 @@ function array_sortby($array, $on, $order = SORT_ASC) {
 
     return $new_array;
 }
+
