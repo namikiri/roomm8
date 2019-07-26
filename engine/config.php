@@ -106,5 +106,94 @@ function config_setStatusColor($status, $color) {
     config_setVal('status_color_config', $statusColorConfig);
 }
 
+function config_setNMStartTime($time) {
+    $nightmodeSettings = config_getVal('nightmode', Array());
+
+    $nightmodeSettings['start_time'] = (int)$time;
+
+    config_setVal('nightmode', $nightmodeSettings);
+}
+
+function config_getNMStartTime() {
+    $nightmodeSettings = config_getVal('nightmode', Array());
+
+    if (empty($nightmodeSettings['start_time'])) {
+        return false;
+    } else {
+        return (int)$nightmodeSettings['start_time']);
+    }
+}
+
+
+function config_setNMStopTime($time) {
+    $nightmodeSettings = config_getVal('nightmode', Array());
+
+    $nightmodeSettings['stop_time'] = (int)$time;
+
+    config_setVal('nightmode', $nightmodeSettings);
+}
+
+function config_getNMStopTime() {
+    $nightmodeSettings = config_getVal('nightmode', Array());
+
+    if (empty($nightmodeSettings['stop_time'])) {
+        return false;
+    } else {
+        return (int)$nightmodeSettings['stop_time']);
+    }
+}
+
+function config_getNightmodeSchedule() {
+    $nightmodeSettings = config_getVal('nightmode', Array());
+
+    if (empty($nightmodeSettings['schedule'])) {
+        return false;
+    } else {
+        return $nightmodeSettings['schedule'];
+    }
+}
+
+function config_setNightmodeSchedule($schedule) {
+    $nightmodeSettings = config_getVal('nightmode', Array());
+
+    $schedule = array_sortby($schedule, 'time'); // schedule is always sorted and stored as sorted
+
+    $nightmodeSettings['schedule'] = $schedule;
+
+    config_setVal('nightmode', $nightmodeSettings);
+}
+
+function config_addNMScheduleItem($time, $color) {
+    $schedule = config_getNightmodeSchedule();
+
+    if (empty($schedule)) {
+        $schedule = Array();
+    }
+
+    array_push($sch, Array(
+            'time' => $time,
+            'color' => $color
+        ));
+
+    config_setNightmodeSchedule($schedule);
+}
+
+function config_removeNMScheduleItemByIndex($index) { // oh I'm so sorry for that name...
+    $schedule = config_getNightmodeSchedule();
+
+    if (empty($schedule)) {
+        return; // okay...
+    }
+
+    $index = (int)$index;
+
+    if ($index >= count($schedule)) {
+        return;
+    }
+
+    unset($schedule[$index]);
+
+    config_setNightmodeSchedule($schedule);
+}
 
 config_load();
