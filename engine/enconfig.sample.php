@@ -33,3 +33,6 @@ define ('TELEGRAM_USE_DIRECT_RESPONSE', true); // respond directly or use HTTP A
 
 // Add your Telegram account IDs here to allow these people to change LEDs state
 $telegram_allowedIds = [31337, 228420];
+
+// This is configured automatically
+define ('WORK_PATH', dirname(__FILE__));
