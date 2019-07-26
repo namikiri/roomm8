@@ -41,3 +41,28 @@ function getRoomConfig($room) {
         return $roomsLedConfig[$room];
     }
 }
+
+function time2Minutes($time) {
+    $timeComponents = Array();
+
+    if (preg_match('/^([0-9]{1,2}):([0-9]{1,2})$/', $time, $timeComponents) === 1) {
+        $hours = (int)$timeComponents[1];
+        $minutes = (int)$timeComponents[2];
+
+        return ($hours * 60) + $minutes;
+
+    } else {
+        return false;
+    }
+}
+
+function minutes2Time($minutes) {
+    $hours = floor($minutes / 60);
+    $minutes = floor($minutes % 60);
+
+    return ($hours < 10 ? "0" : "") . $hours . ":" . ($minutes < 10 ? "0" : "") . $minutes;
+}
+
+function currentMinutes() {
+    return time2Minutes(date('H:i'));
+}
