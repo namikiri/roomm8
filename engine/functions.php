@@ -71,7 +71,7 @@ function isInRange($check, $start, $end) {
     if ($start < $end) {
         return ($check >= $start && $check < $end);
     } else {
-        return ($check > $end && $check <= $start);
+        return ($check > $end || $check <= $start);
     }
 }
 

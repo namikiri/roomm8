@@ -5,7 +5,7 @@ $config = Array();
 function config_load() {
     global $config;
 
-    $content = file_get_contents('engine/runtime/config.json');
+    $content = file_get_contents(WORK_PATH.'/runtime/config.json');
 
     if (!empty($content)) {
         $config = json_decode($content, true);
@@ -18,7 +18,7 @@ function config_load() {
 function config_save() {
     global $config;
 
-    file_put_contents('engine/runtime/config.json', json_encode($config));
+    file_put_contents(WORK_PATH.'/runtime/config.json', json_encode($config));
 }
 
 function config_getVal($key, $defaultValue = 0) {

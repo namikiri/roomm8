@@ -64,12 +64,12 @@ function leds_shutdown($room) {
     }
 }
 
-function leds_setNightMode() {
+function leds_setNightMode($color = NIGHTMODE_COLOR) {
     global $roomsLedConfig;
 
     $status = true;
     foreach ($roomsLedConfig as $roomId => $roomConfig) {
-            if (!leds_writeHex($roomId, NIGHTMODE_COLOR)) {
+            if (!leds_writeHex($roomId, $color)) {
                 $status = false;
             }
         }
