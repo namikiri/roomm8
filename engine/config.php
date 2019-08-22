@@ -193,7 +193,7 @@ function config_removeNMScheduleItemByIndex($index) { // oh I'm so sorry for tha
 
     unset($schedule[$index]);
 
-    config_setNightmodeSchedule($schedule);
+    config_setNightmodeSchedule(array_values($schedule)); // re-indexed array
 
     return true;
 }

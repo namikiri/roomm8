@@ -32,6 +32,8 @@ echo ("Checking schedule...\n");
 $startTime = config_getNMStartTime();
 $stopTime = config_getNMStopTime();
 
+printf("Time: Start time %s (%dm), End time %s (%dm)\n", minutes2Time($startTime), $startTime, minutes2Time($stopTime), $stopTime);
+
 if (isInRange($currentTime, $startTime, $stopTime)) {
 
 	echo ("Oh, it's night mode time! Let's check if some color is set for this minute...\n");

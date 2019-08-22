@@ -68,10 +68,18 @@ function currentMinutes() {
 }
 
 function isInRange($check, $start, $end) {
-    if ($start < $end) {
-        return ($check >= $start && $check < $end);
+    if ($check >= $start) {
+        if ($check < $end) {
+            return true;
+        } else {
+            if ($start > $end) {
+                return ($check > $end);
+            } else {
+                return false;
+            }
+        }
     } else {
-        return ($check > $end || $check <= $start);
+        return false;
     }
 }
 
