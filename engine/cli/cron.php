@@ -20,15 +20,6 @@ $currentTime = currentMinutes();
 echo ("Current time is " . minutes2Time($currentTime) . " ($currentTime minutes)\n");
 echo ("Checking schedule...\n");
 
-/*
-
-	TODOs:
-	- check nightmode range
-	- check end_time to shutdown leds
-	- test this shit
-
-*/
-
 $startTime = config_getNMStartTime();
 $stopTime = config_getNMStopTime();
 
